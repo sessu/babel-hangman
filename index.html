@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <script src="https://unpkg.com/react@16/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+    <title>Hangman</title>
+</head>
+
+<body>
+    <div id="app" />
+    <script type="text/babel">
+        // Word
+        let word = 'test';
+        
+        // Return word in lowercase
+        var getWord = () => {
+            return word.toLowerCase();
+        }
+
+        // Return spaces in word (set score offset)
+        var getSpaces = () => {
+            let spaces = 0;
+            for (let letter of word){
+                if (letter.charCodeAt(0) <= 32)
+                spaces++;
+            }
+            console.log(spaces);
+            return spaces;
+        }
+
+            class App extends React.Component {
+                constructor(props) {
+                    super(props);
+                    this.state = {
+                        guess: 0,
+                        word: getWord(),
+                        score: 0,
+                        guesses: []
+                    };
+                }
+            
+                render() { 
+                    // Make letter buttons
+                    const letters = [];
+                    for (let i = 97; i < 123; i++){
+                        let char = String.fromCharCode(i);
+                        letters.push(<button id={`button${char}`} key={char} onClick={() => this.guess(char)}>{char}</button>)
+                    }
+
+                    // Make blanks
+                    const blanks = [];
+                    for (let i = 0; i < this.state.word.length; i++){
+                        let char = this.state.word[i];
+                        let charCode = char.charCodeAt(0);
+
+                        if (char == " "){
+                            blanks.push(<span id={`blank${i}`} key={i}>&nbsp;&nbsp;</span>)
+                        } else if (97 <= charCode && charCode < 123) {
+                            blanks.push(<span id={`blank${i}`} key={i}>_ </span>)
+                        } else {
+                            console.log("?");
+                            blanks.push(<span id={`blank${i}`} key={i}>{this.state.word[i]} </span>)
+                        }
+                    }
+
+                    // As long as guesses are left
+                    if (this.state.score > 1 && this.testBlanks){
+                        return (
+                            <div>
+                                <h1>You win</h1>
+                                <p>The word was {word}</p>
+                            </div>
+                        );
+                    } else if (this.state.guess <= 6) {
+                        return (
+                        <div>
+                            <img src={"hangman-img/"+this.state.guess+".png"} />
+                            <div id="blanks-container">
+                                {blanks}
+                            </div>
+                            <h1>Guess</h1>
+                            {letters}
+                        </div>
+                        );   
+                    } else {
+                        return (
+                            <div>
+                                <h1>Game Over</h1>
+                            </div>
+                        );
+                    }
+
+
+                    }
+
+                    guess = (char) => {
+                        if (this.state.word.includes(char)){
+                            console.log(`bingo! ${char}`);
+                            for (let i = 0; i < this.state.word.length; i++){
+                                if (this.state.word[i] == char){
+                                    document.querySelector(`#blank`+i).innerHTML = char;
+                                    this.setState(state => ({
+                                        score: state.score + 1
+                                    }))
+                                }
+                            }
+                        } else {
+                            var addedLetter = this.state.guesses.concat(char);
+                            this.setState(state => ({
+                                guess: state.guess + 1,
+                                guesses: addedLetter
+                            }))
+                        }
+                        console.log(`SCORE ${this.state.score} GUESSES ${this.state.guess}`);
+                        document.querySelector(`#button`+char).disabled = true;
+                    };
+
+                    testBlanks = () => {
+                        for (let i = 0; i < this.state.word.length; i++){
+                            let val = document.querySelector(`#blank`+i).textContent;
+                            if (val.includes("_")){
+                                return false;
+                            }
+                            return true;
+                        }
+                    }
+            }
+
+            
+
+
+
+             
+            ReactDOM.render(<App />, document.querySelector("#app"));
+    </script>
+</body>
+
+</html>
