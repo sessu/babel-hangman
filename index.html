@@ -7,23 +7,36 @@
     <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
     <title>Hangman</title>
     <style>
-        #guessing{
-            width: 800px;
+
+        body {
+            background: linear-gradient(to bottom, darkgray, darkslategray);
+            height: 100vh;
         }
 
-        div {
+        #app {
             margin: 5px;
+            width: 400px;
+            text-align: center;
+            margin: auto;
+            background-color: white;
+            border: 2px solid black;
         }
-        
+
+        #app div {
+            margin-bottom: 5px;
+        }
+
         img {
-            float: left;
+            margin: 5px auto;
+            display: block;
         }
 
         #blanks-container {
             border: 1px solid black;
             border-radius: 5px;
             background-color: darkslategray;
-            display: inline-block;
+            display: block;
+            padding: 5px 0;
         }
 
         #blanks-container span {
@@ -32,19 +45,64 @@
             padding: 3px;
             margin: 3px;
         }
+
+        #letters-container {
+            padding: 10px;
+        }
     </style>
 </head>
 
 <body>
     <div id="app" />
     <script type="text/babel">
-        // Word
-        let word = "Bemani";
-        
+        // Wordlist
+        const wordList = [
+    ["Bang Pad(Werk Mix)"],
+    ["BRIDAL FESTIVAL !!!"],
+    ["City Never Sleeps"],
+    ["CONNECT"],
+    ["DANCERUSH STARDOM ANTHEM"],
+    ["DEADLOCK -Out Of Reach-"],
+    ["DeStRuCtIvE FoRcE"],
+    ["DIGITALIZER"],
+    ["Draw the Savage"],
+    ["GHOST KINGDOM"],
+    ["Going Hypersonic"],
+    ["HARD BRAIN"],
+    ["Hyper Bomb"],
+    ["HYPERDRIVE"],
+    ["HyperTwist"],
+    ["I Want To Do This Keep"],
+    ["In the past"],
+    ["Inner Spirit -GIGA HiTECH MIX-"],
+    ["Jetcoaster Windy"],
+    ["Last Card"],
+    ["Last Twilight"],
+    ["Lightspeed"],
+    ["Midnight Amaretto"],
+    ["MUTEKI BUFFALO"],
+    ["Never See You Again"],
+    ["Our Love"],
+    ["PANIC HOLIC"],
+    ["Rave Accelerator"],
+    ["Red Cape Theorem"],
+    ["Riot of Color"],
+    ["ROOM"],
+    ["Sparkle Smilin'"],
+    ["STEP MACHINE"],
+    ["Take me higher"],
+    ["Twinkle Wonderland"],
+    ["X-ray binary"]
+];
+
         // Return word in lowercase
         var getWord = () => {
+            const randomChoice = Math.floor(Math.random() * (wordList.length));
+            const word = wordList[randomChoice].toString();
+            console.log(word);
             return word.toLowerCase();
         }
+
         var calcMaxScore = () => {
             let max = 0;
             for (let char of getWord()){
@@ -105,7 +163,6 @@
                         return (
                         <div id="guessing">
                             <img src={"hangman-img/"+this.state.guess+".png"} />
-                            <h1>Guess</h1>
                             <div id="blanks-container">
                                 {blanks}
                             </div>
