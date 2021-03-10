@@ -95,16 +95,18 @@
     ["X-ray binary"]
 ];
 
+        var thisWord;
+
         // Return word in lowercase
         var getWord = () => {
             const randomChoice = Math.floor(Math.random() * (wordList.length));
-            const word = wordList[randomChoice].toString();
-            return word.toLowerCase();
+            thisWord = wordList[randomChoice].toString().toLowerCase();
+            return thisWord;
         }
 
         var calcMaxScore = () => {
             let max = 0;
-            for (let char of getWord()){
+            for (let char of thisWord){
                 let charCode = char.charCodeAt(0);
                 if (97 <= charCode && charCode <= 123){
                     max++;
